@@ -1,0 +1,28 @@
+<root>
+    <PowerAllData>
+        <PowerData hour="1" power ="85" />
+        <PowerData hour="2" power ="85" />
+        <PowerData hour="3" power ="85" />
+        <PowerData hour="4" power ="85" />
+        <PowerData hour="5" power ="80" />
+        <PowerData hour="6" power ="80" />
+        <PowerData hour="7" power ="80" />
+        <PowerData hour="8" power ="90" />
+        <PowerData hour="9" power ="90" />
+        <PowerData hour="10" power ="100" />
+        <PowerData hour="11" power ="100" />
+        <PowerData hour="12" power ="100" />
+        <PowerData hour="13" power ="95" />
+        <PowerData hour="14" power ="95" />
+        <PowerData hour="15" power ="95" />
+        <PowerData hour="16" power ="95" />
+        <PowerData hour="17" power ="90" />
+        <PowerData hour="18" power ="90" />
+        <PowerData hour="19" power ="90" />
+        <PowerData hour="20" power ="90" />
+        <PowerData hour="21" power ="90" />
+        <PowerData hour="22" power ="90" />
+        <PowerData hour="23" power ="90" />
+        <PowerData hour="24" power ="85" />
+    </PowerAllData>
+</root>
