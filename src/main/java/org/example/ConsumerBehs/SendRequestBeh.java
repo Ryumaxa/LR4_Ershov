@@ -20,7 +20,6 @@ public class SendRequestBeh extends Behaviour { // Отправка задани
         // Получение значения требуемой мощности в текущем часу
         HashMap<Integer, Double> hashMap = (HashMap<Integer, Double>) getAgent().getArguments()[0];
         double RequiredPower = hashMap.get(TimeTracker.getCurrentHour());
-//        System.out.println(getAgent().getLocalName() + "   " + TimeTracker.getCurrentHour() + "     " + RequiredPower);
 
         // Отправка запроса поставщику
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
@@ -29,7 +28,6 @@ public class SendRequestBeh extends Behaviour { // Отправка задани
         AID receiver = new AID("ProviderOf" + getAgent().getLocalName(), false);
         message.addReceiver(receiver);
         getAgent().send(message);
-        System.out.println(message.getContent());
 
     }
 

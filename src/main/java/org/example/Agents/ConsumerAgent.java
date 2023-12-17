@@ -4,14 +4,12 @@ import jade.core.Agent;
 import org.example.ConsumerBehs.ConsTestBeh;
 import org.example.ConsumerBehs.ConsumerXmlParser;
 import org.example.ConsumerBehs.SendRequestBeh;
-import org.example.ConsumerBehs.TimeTestBeh;
 
 public class ConsumerAgent extends Agent {
     protected void setup() {
         System.out.println(getLocalName() + " готов работать");
         this.addBehaviour(new ConsumerXmlParser());
         this.addBehaviour(new ConsTestBeh());
-//        this.addBehaviour(new TimeTestBeh());
         this.addBehaviour(new SendRequestBeh());
     }
 
