@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.HashMap;
 
 public class ConsumerXmlParser extends OneShotBehaviour {
-
     @Override
     public void action() {
         HashMap<Integer, Double> hashMap = new HashMap<>();

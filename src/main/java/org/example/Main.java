@@ -1,7 +1,7 @@
 package org.example;
 
-import jade.core.Profile;
 import jade.core.ProfileImpl;
+import jade.util.ExtendedProperties;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -10,10 +10,15 @@ import org.example.Agents.ProducerAgent;
 import org.example.Agents.ProviderAgent;
 import org.example.HelperClasses.TimeTracker;
 
+import java.util.Properties;
+
 public class Main {
     public static void main(String[] args) throws StaleProxyException {
         jade.core.Runtime runtime = jade.core.Runtime.instance();
-        Profile profile = new ProfileImpl();
+
+        Properties props = new ExtendedProperties();
+        props.setProperty("gui", "true");
+        ProfileImpl profile = new ProfileImpl(jade.util.leap.Properties.toLeapProperties(props));
         AgentContainer container = runtime.createMainContainer(profile);
 
         TimeTracker.StartTime();

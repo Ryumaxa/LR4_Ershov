@@ -1,14 +1,14 @@
 package org.example.ConsumerBehs;
 
 import jade.core.AID;
-import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import org.example.HelperClasses.TimeTracker;
 
 import java.util.HashMap;
 import java.util.Random;
 
-public class SendRequestBeh extends Behaviour { // Отправка задания на закупку и определение MAX цены
+public class SendRequestBeh extends OneShotBehaviour { // Отправка задания на закупку и определение MAX цены
     @Override
     public void action() {
         Random random = new Random();
@@ -29,10 +29,5 @@ public class SendRequestBeh extends Behaviour { // Отправка задани
         message.addReceiver(receiver);
         getAgent().send(message);
 
-    }
-
-    @Override
-    public boolean done() {
-        return false;
     }
 }

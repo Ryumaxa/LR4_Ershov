@@ -3,7 +3,6 @@ package org.example.HelperClasses;
 import java.util.Random;
 
 public class ProducersFunctions {
-    static final int test_hour = 0; // ДЛЯ ПРОВЕРКИ, ПОТОМ УДАЛИТЬ
     static final Double A = 8.1;
     static final Double B1 = 5.8;
     static final Double B2 = 7.2;
@@ -17,7 +16,7 @@ public class ProducersFunctions {
         double resultPower = switch (name) {
             case "HeatPP" -> A;
             case "WindPP" -> generateRandomValue(B1, B2); // ПОЧЕМУ МОЖЕТ УХОДИТЬ В МИНУС ??????????????
-            case "SolarPP" -> solarPowerCalculation(test_hour, C_ARRAY);
+            case "SolarPP" -> solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY);
             default -> 0.0;
         };
         return resultPower;
