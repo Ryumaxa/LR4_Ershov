@@ -5,6 +5,9 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.ProducersFunctions;
+import org.example.HelperClasses.TimeTracker;
+
+import java.sql.Time;
 
 public class GetInviteBeh extends Behaviour {
     @Override
@@ -16,7 +19,7 @@ public class GetInviteBeh extends Behaviour {
             String[] values = content.split(";");
             double RequiredPower = Double.parseDouble(values[0]);
             double maxPrice = Double.parseDouble(values[1]);
-            System.out.println(content);
+            System.out.println("Hour = " + TimeTracker.getCurrentHour() + " AND " + content);
 
             // Проверка доступности мощности для участия в аукционе и соответствующий ответ поставщику
             ACLMessage answer = new ACLMessage(ACLMessage.INFORM);

@@ -3,6 +3,7 @@ package org.example.ConsumerBehs;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import org.example.HelperClasses.TimeTracker;
 
 public class ConsumerWaitingBeh extends Behaviour {
     String result = null;
