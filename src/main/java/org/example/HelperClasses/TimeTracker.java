@@ -24,6 +24,9 @@ public class TimeTracker {
         LocalDateTime currentTime = LocalDateTime.now();
         long millisecondsPassed = startTime.until(currentTime, ChronoUnit.MILLIS);
         long long_hour = millisecondsPassed * 1000 / 3600000 + 1; // Пока что ускорено в 1000 раз (нужно в 48)
+        if (long_hour > 24) {
+            long_hour = long_hour - (long_hour/24)*24; // Не допускает превышение 24-часового формата
+        }
         return (int) long_hour;
     }
 

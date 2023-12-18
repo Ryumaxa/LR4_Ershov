@@ -1,6 +1,7 @@
 package org.example.ConsumerBehs;
 
 import jade.core.behaviours.FSMBehaviour;
+import org.example.HelperClasses.TimeTracker;
 
 public class ConsumerFSM extends FSMBehaviour {
     private static final String SEND_REQUEST = "sendRequest", WAIT_RESULTS = "waitResults", SEND_CORRECTED_REQUEST = "sendCorrectedRequest";
