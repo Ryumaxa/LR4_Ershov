@@ -1,9 +1,17 @@
 package org.example.HelperClasses;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class ProducersFunctions {
-    static final Double A = 8.1;
+    private static HashMap<Integer, Double> WindPPowerGraphic = new HashMap<>();
+    public static void CountPowerOfWindPP () {
+        for (int i = 1; i <= 24; i++) {
+            Random random = new Random();
+            WindPPowerGraphic.put(i, random.nextGaussian() * B2 + B1);
+        }
+    }
+    static final Double A = 8.1 + 20; // УДАЛИТЬ ОТСЮДА 20
     static final Double B1 = 5.8;
     static final Double B2 = 7.2;
     static final Double C0 = -81.355;
@@ -15,16 +23,16 @@ public class ProducersFunctions {
     public static double ProducerFunc (String name) {
         double resultPower = switch (name) {
             case "HeatPP" -> A;
-            case "WindPP" -> generateRandomValue(B1, B2); // ПОЧЕМУ МОЖЕТ УХОДИТЬ В МИНУС ??????????????
+            case "WindPP" -> generateRandomValue(); // ПОЧЕМУ МОЖЕТ УХОДИТЬ В МИНУС ??????????????
             case "SolarPP" -> solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY);
             default -> 0.0;
         };
         return resultPower;
     }
 
-    public static double generateRandomValue(double mean, double deviation) {
-        Random random = new Random();
-        return random.nextGaussian() * deviation + mean;
+
+    public static double generateRandomValue() {
+        return WindPPowerGraphic.get(TimeTracker.getCurrentHour());
     }
 
 
@@ -37,6 +45,30 @@ public class ProducersFunctions {
         }
         return result;
     }
+
+    public static double getPPminPrice (String name) {
+        double minPrice = switch (name) {
+            case "HeatPP" -> 3.0;
+            case "WindPP" -> generateWindPPPrice();
+            case "SolarPP" -> generateSolarPPPrice();
+            default -> 100;
+        };
+        return minPrice;
+    }
+    public static double generateWindPPPrice () {
+        double minPrice;
+        if (generateRandomValue() >= B1) {
+            minPrice = 3;
+        } else {
+            minPrice = 3.4;
+        }
+        return minPrice;
+    }
+
+    public static double generateSolarPPPrice () {
+        return 3 + (1/solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY));
+    }
+
 
 
 }

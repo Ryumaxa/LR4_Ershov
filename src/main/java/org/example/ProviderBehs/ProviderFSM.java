@@ -1,18 +1,23 @@
 package org.example.ProviderBehs;
 
 import jade.core.behaviours.FSMBehaviour;
-import org.example.ConsumerBehs.ConsumerWaitingBeh;
-import org.example.ConsumerBehs.SendRequestBeh;
+import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
 public class ProviderFSM extends FSMBehaviour {
-    private static final String RECEIVE_REQUEST = "receiveRequest", WAIT_RESULTS = "waitResults", SEND_CORRECTED_REQUEST = "sendCorrectedRequest";
+    public static void setAuctionParticipants(List<String> auctionParticipants) {
+        AuctionParticipants = auctionParticipants;
+    }
+    @Getter
+    private static List<String> AuctionParticipants = new ArrayList<>();
+
+    private static final String RECEIVE_REQUEST = "receiveRequest", START_AUCTION = "startAuction", SEND_CORRECTED_REQUEST = "sendCorrectedRequest";
     public void onStart() {
-//        this.registerFirstState(new SendRequestBeh(), SEND_REQUEST); // Дополнить конструктором с неудовлетворительной ценой в случае неуспешного аукциона
-//        this.registerState(new ConsumerWaitingBeh(), WAIT_RESULTS);
-//        this.registerLastState(new SendRequestBeh(true), SEND_CORRECTED_REQUEST);
-//
-//        this.registerDefaultTransition(SEND_REQUEST, WAIT_RESULTS);
-//        this.registerTransition(WAIT_RESULTS, SEND_CORRECTED_REQUEST, 0);
+        this.registerFirstState(new ReceiveRequestBeh(), RECEIVE_REQUEST); // OneShotBehaviour с ожиданием запроса от потребителя. Возвращает 1 или 0 в зависимости от успешности поиска производителей
+        this.registerState(new StartAuctionBeh(), START_AUCTION); // Поведение создания топика и начала прочитывания сообщений в нем
+
+        this.registerTransition(RECEIVE_REQUEST, START_AUCTION, 1);
     }
 
 }

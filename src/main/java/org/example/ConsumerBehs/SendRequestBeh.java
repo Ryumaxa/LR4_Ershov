@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class SendRequestBeh extends OneShotBehaviour { // Отправка задания на закупку и определение MAX цены
-
     boolean need_to_upper_price = false;
     public SendRequestBeh() {
     }
@@ -40,6 +39,5 @@ public class SendRequestBeh extends OneShotBehaviour { // Отправка за�
         AID receiver = new AID("ProviderOf" + getAgent().getLocalName(), false);
         message.addReceiver(receiver);
         getAgent().send(message);
-
     }
 }

@@ -1,5 +1,6 @@
 package org.example;
 
+import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.util.ExtendedProperties;
 import jade.wrapper.AgentContainer;
@@ -8,6 +9,7 @@ import jade.wrapper.StaleProxyException;
 import org.example.Agents.ConsumerAgent;
 import org.example.Agents.ProducerAgent;
 import org.example.Agents.ProviderAgent;
+import org.example.HelperClasses.ProducersFunctions;
 import org.example.HelperClasses.TimeTracker;
 
 import java.util.Properties;
@@ -18,10 +20,12 @@ public class Main {
 
         Properties props = new ExtendedProperties();
         props.setProperty("gui", "true");
+        props.setProperty(Profile.SERVICES, "jade.core.messaging.TopicManagementService");
         ProfileImpl profile = new ProfileImpl(jade.util.leap.Properties.toLeapProperties(props));
         AgentContainer container = runtime.createMainContainer(profile);
 
         TimeTracker.StartTime();
+        ProducersFunctions.CountPowerOfWindPP();
 
         AgentController agentController = container.createNewAgent("CvetMet", ConsumerAgent.class.getName(), null);
         agentController.start();
