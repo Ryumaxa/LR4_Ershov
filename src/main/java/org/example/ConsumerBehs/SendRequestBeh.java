@@ -10,11 +10,11 @@ import java.util.Random;
 
 public class SendRequestBeh extends OneShotBehaviour { // Отправка задания на закупку и определение MAX цены
 
-    boolean need_to_lower_price = false;
+    boolean need_to_upper_price = false;
     public SendRequestBeh() {
     }
-    public SendRequestBeh(boolean need_to_lower_price) {
-        this.need_to_lower_price = need_to_lower_price;
+    public SendRequestBeh(boolean need_to_upper_price) {
+        this.need_to_upper_price = need_to_upper_price;
     }
 
     @Override
@@ -22,9 +22,9 @@ public class SendRequestBeh extends OneShotBehaviour { // Отправка за�
         Random random = new Random();
         int min = 4;
         int max = 6;
-        if (need_to_lower_price) {
-            min = 3;
-            max = 4;
+        if (need_to_upper_price) {
+            min = 6;
+            max = 7;
         }
         // Генерация стартовой цены за кВт*ч
         float maxPrice = random.nextFloat(max - min + 1) + min;

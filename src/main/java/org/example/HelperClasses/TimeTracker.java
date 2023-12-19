@@ -18,8 +18,6 @@ public class TimeTracker {
         return millisecondsUntil;
     }
 
-    // ДОБАВИТЬ СБРОС ВРЕМЕНИ ПРИ ДОСТИЖЕНИИ 24 ЧАСОВ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     public static int getCurrentHour() { // ЗАМЕНИТЬ 1000 на 48!
         LocalDateTime currentTime = LocalDateTime.now();
         long millisecondsPassed = startTime.until(currentTime, ChronoUnit.MILLIS);

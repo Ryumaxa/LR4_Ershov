@@ -22,7 +22,6 @@ public class ProducersFunctions {
         return resultPower;
     }
 
-
     public static double generateRandomValue(double mean, double deviation) {
         Random random = new Random();
         return random.nextGaussian() * deviation + mean;

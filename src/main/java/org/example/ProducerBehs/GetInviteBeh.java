@@ -11,7 +11,7 @@ public class GetInviteBeh extends Behaviour {
     @Override
     public void action() {
         // Получение данных от поставщика для определения возможности участия в аукционе с такими условиями
-        ACLMessage RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("Invite"));
+        ACLMessage RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("IsPowerAvailable"));
         if (RequestFromConsumer != null) {
             String content = RequestFromConsumer.getContent();
             String[] values = content.split(";");
@@ -28,6 +28,7 @@ public class GetInviteBeh extends Behaviour {
             }
             answer.addReceiver(new AID(RequestFromConsumer.getSender().getLocalName(), false));
             getAgent().send(answer);
+            System.out.println(getAgent().getLocalName() + " принял запрос на " + RequiredPower + " в " + TimeTracker.getCurrentHour() + " часу");
         }
     }
 

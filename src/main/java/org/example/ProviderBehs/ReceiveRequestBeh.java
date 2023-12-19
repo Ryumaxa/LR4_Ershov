@@ -1,30 +1,33 @@
 package org.example.ProviderBehs;
 import jade.core.AID;
-import jade.core.ServiceException;
 import jade.core.behaviours.Behaviour;
-import jade.core.messaging.TopicManagementHelper;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.DfHelper;
 import org.example.HelperClasses.TimeTracker;
-import org.example.HelperClasses.TopicHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReceiveRequestBeh extends Behaviour {
-
+    boolean isInvitesSend = false;
+    boolean isDone = false;
     @Override
     public void action() {
-        // Получение запроса от потребителя
         ACLMessage RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("RequestFromConsumer"));
+        // Получение запроса от потребителя
+//        ACLMessage RequestFromConsumer = null;
+//        while (RequestFromConsumer == null) {
+//            RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("RequestFromConsumer"));
+//        }
         if (RequestFromConsumer != null) {
             String content = RequestFromConsumer.getContent();
 
             // Опрос производителей на тему доступной мощности
             List<AID> Found_Producers = DfHelper.search(getAgent(), "Produce");
             ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-            message.setConversationId("Invite");
+            message.setConversationId("IsPowerAvailable");
             message.setContent(content);
             for (AID aid : Found_Producers) {
                 message.addReceiver(new AID(aid.getLocalName(), false));
@@ -44,33 +47,30 @@ public class ReceiveRequestBeh extends Behaviour {
                 }
             }
 
-            // Если нашлись агенты с доступной мощностью, открываем для них и для себя новый топик
-//            if (!TheyHavePower.isEmpty()) {
-//                try {
-//                    // Создание топика и подключение к нему поставщика
-//                    AID topic = TopicHelper.register(getAgent(), "Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour());
-//                    TopicManagementHelper topicHelper = (TopicManagementHelper) getAgent().getHelper(TopicManagementHelper.SERVICE_NAME);
-//                    topicHelper.register(topic);
-//                    // Отправка имени топика участникам аукциона
-////                    for (String s : TheyHavePower) {
-////                        topicHelper.register(topic);
-////                    }
-//                } catch (ServiceException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//
-//            }
-
-
-
-
+            //Если нашлись агенты с доступной мощностью, отправляем им приглашение, содержащее имя топика
+            if (!TheyHavePower.isEmpty()) {
+                ACLMessage invite = new ACLMessage(ACLMessage.INFORM);
+                invite.setConversationId("InviteToAuction");
+                invite.setContent("Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour());
+                for (String s : TheyHavePower) {
+                    invite.addReceiver(new AID(s, false));
+                    System.out.println(s);
+                }
+                getAgent().send(invite);
+                isInvitesSend = true;
+            }
+            isDone = true;
         }
     }
 
     @Override
     public boolean done() {
         return false;
+    }
+
+    // Если нашлись получатели для приглашения на аукцион, возвращаем 1
+    public int onEnd() {
+        return isInvitesSend ? 1 : 0;
     }
 }
 
