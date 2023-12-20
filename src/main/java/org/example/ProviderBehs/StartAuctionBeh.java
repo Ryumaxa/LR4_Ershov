@@ -17,9 +17,11 @@ public class StartAuctionBeh extends Behaviour {
     AID topic;
     @Override
     public void onStart() {
+        System.out.println("Поведение StartAuctionBeh запускается" + TimeTracker.getCurrentHour() + getAgent().getLocalName());
         // Тут создается топик с соответствующим именем
         try {
             topic = TopicHelper.register(getAgent(), "Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour());
+            System.out.println("Создан топик с именем " + topic.getLocalName());
         } catch (ServiceException e) {
             throw new RuntimeException(e);
         }
@@ -27,6 +29,7 @@ public class StartAuctionBeh extends Behaviour {
 
     @Override
     public void action() {
+        // Получение ставок и перезапись лучшей ставки и потенциального победителя
         ACLMessage mesFromTopic = getAgent().receive(MessageTemplate.MatchTopic(topic));
         if (mesFromTopic != null) {
             if (Double.parseDouble(mesFromTopic.getContent()) < bestPrice) {
@@ -37,10 +40,12 @@ public class StartAuctionBeh extends Behaviour {
         if (TimeTracker.getMillsUntilNextHour() < 500) { // Завершение аукциона по таймеру
             ACLMessage stopper = new ACLMessage(ACLMessage.INFORM);
             stopper.setConversationId("Stopper");
-            stopper.setContent("StopAuction");
-
+            stopper.setContent(winnerName);
+            ProviderFSM.setWinnerName(winnerName);
             List<String> Participants = ProviderFSM.getAuctionParticipants();
-
+            for (String agentName : Participants) {
+                stopper.addReceiver(new AID(agentName, false));
+            }
             getAgent().send(stopper);
         }
     }
@@ -51,5 +56,9 @@ public class StartAuctionBeh extends Behaviour {
         return winnerHasFound;
     }
 
-
+    @Override
+    public int onEnd() {
+        ProviderFSM.setPriceInfo(bestPrice);
+        return super.onEnd();
+    }
 }

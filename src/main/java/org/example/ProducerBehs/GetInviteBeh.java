@@ -9,7 +9,8 @@ import org.example.HelperClasses.TimeTracker;
 
 public class GetInviteBeh extends Behaviour {
     private boolean isHavePower = false;
-    private boolean isAnswerSend = false;
+//    private boolean isAnswerSend = false;
+    private int counter1 = 0;
     @Override
     public void action() {
         // Получение данных от поставщика для определения возможности участия в аукционе с такими условиями
@@ -32,14 +33,15 @@ public class GetInviteBeh extends Behaviour {
             }
             answer.addReceiver(new AID(RequestFromConsumer.getSender().getLocalName(), false));
             getAgent().send(answer);
-            isAnswerSend = true;
+//            isAnswerSend = true;
+            counter1++;
             System.out.println(getAgent().getLocalName() + " принял запрос на " + RequiredPower + " в " + TimeTracker.getCurrentHour() + " часу, имея мощность = " + ProducersFunctions.ProducerFunc(getAgent().getLocalName()) + " и сказал " + answer.getContent());
         }
     }
 
     @Override
     public boolean done() {
-        return isAnswerSend;
+        return (counter1 >= 3); //isAnswerSend;
     }
 
     @Override

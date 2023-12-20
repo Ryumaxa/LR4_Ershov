@@ -18,6 +18,7 @@ public class SendRequestBeh extends OneShotBehaviour { // Отправка за�
 
     @Override
     public void action() {
+        System.out.println("Поведение SendRequestBeh запускается" + TimeTracker.getCurrentHour());
         Random random = new Random();
         int min = 4;
         int max = 6;

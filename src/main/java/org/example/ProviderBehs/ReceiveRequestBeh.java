@@ -13,13 +13,18 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
     boolean isInvitesSend = false;
     @Override
     public void action() {
+        System.out.println("Поведение ReceiveRequestBeh запускается" + TimeTracker.getCurrentHour());
         // Получение запроса от потребителя
         ACLMessage RequestFromConsumer = null;
         while (RequestFromConsumer == null) {
             RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("RequestFromConsumer"));
         }
 
+        // Сохраняем информацию о величине закупаемой мощности
         String content = RequestFromConsumer.getContent();
+        String[] values = content.split(";");
+        double RequiredPower = Double.parseDouble(values[0]);
+        ProviderFSM.setPowerInfo(RequiredPower);
 
         // Опрос производителей на тему доступной мощности
         List<AID> Found_Producers = DfHelper.search(getAgent(), "Produce");
