@@ -41,12 +41,14 @@ public class StartAuctionBeh extends Behaviour {
             ACLMessage stopper = new ACLMessage(ACLMessage.INFORM);
             stopper.setConversationId("Stopper");
             stopper.setContent(winnerName);
+            System.out.println("Победитель = " + winnerName);
             ProviderFSM.setWinnerName(winnerName);
             List<String> Participants = ProviderFSM.getAuctionParticipants();
             for (String agentName : Participants) {
                 stopper.addReceiver(new AID(agentName, false));
             }
             getAgent().send(stopper);
+            winnerHasFound = true;
         }
     }
 

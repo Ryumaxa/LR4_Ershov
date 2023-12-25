@@ -11,12 +11,15 @@ public class SendContractBeh extends Behaviour {
     boolean haveAccept = false;
     @Override
     public void onStart() {
-        // Отправка контракта победителю
-        ACLMessage contractMessage = new ACLMessage(ACLMessage.INFORM);
-        contractMessage.setConversationId("Contract");
-        contractMessage.setContent("YouHaveNewContract");
-        contractMessage.addReceiver(new AID(ProviderFSM.getWinnerName(), false));
-        getAgent().send(contractMessage);
+        if (ProviderFSM.getWinnerName() != null) {
+            // Отправка контракта победителю
+            ACLMessage contractMessage = new ACLMessage(ACLMessage.INFORM);
+            contractMessage.setConversationId("Contract");
+            contractMessage.setContent("YouHaveNewContract");
+            contractMessage.addReceiver(new AID(ProviderFSM.getWinnerName(), false));
+            getAgent().send(contractMessage);
+        }
+
     }
 
     @Override

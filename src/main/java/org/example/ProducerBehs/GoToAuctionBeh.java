@@ -46,6 +46,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
                 myBid.setConversationId("ProducerBid");
                 myBid.addReceiver(topic);
                 myBid.setContent(currentPrice + "");
+                System.out.println(currentPrice);
 
                 getAgent().send(myBid);
                 try {
@@ -56,8 +57,9 @@ public class GoToAuctionBeh extends OneShotBehaviour {
             }
             stopper = getAgent().receive(MessageTemplate.MatchConversationId("Stopper"));
         }
+        System.out.println("STOPPER CONTENT = " + stopper);
         //Если этот производитель победил в аукционе
-        if (stopper.getContent().equals(getAgent().getName())) {
+        if (stopper.getContent() != null && stopper.getContent().equals(getAgent().getName())) {
             isImWinner = true;
         }
     }
