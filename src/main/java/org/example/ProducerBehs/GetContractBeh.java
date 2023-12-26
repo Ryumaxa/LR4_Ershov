@@ -10,16 +10,18 @@ public class GetContractBeh extends Behaviour {
     public void action() {
         ACLMessage messageContract = getAgent().receive(MessageTemplate.MatchConversationId("Contract"));
         if (messageContract != null) {
+            System.out.println("16    Производитель получает контракт");
             ACLMessage ansToContract = new ACLMessage(ACLMessage.INFORM);
             ansToContract.setConversationId("ReactionForContract");
             // С вероятностью 95% контракт будет принят
-            if (Math.random() < 0.95) {
+            if (Math.random() <= 0.95) {
                 ansToContract.setContent("OK");
             } else {
                 ansToContract.setContent("NO");
             }
             ansToContract.addReceiver(new AID(messageContract.getSender().getLocalName(), false));
             getAgent().send(ansToContract);
+            System.out.println("17    Производитель отвечает на контракт");
         }
     }
 

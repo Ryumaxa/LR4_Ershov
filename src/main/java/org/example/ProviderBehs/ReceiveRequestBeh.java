@@ -11,14 +11,13 @@ import java.util.List;
 
 public class ReceiveRequestBeh extends OneShotBehaviour {
     boolean isInvitesSend = false;
+    private ACLMessage RequestFromConsumer;
+    public ReceiveRequestBeh(ACLMessage requestFromConsumer) {
+        RequestFromConsumer = requestFromConsumer;
+    }
+
     @Override
     public void action() {
-        System.out.println("Поведение ReceiveRequestBeh запускается" + TimeTracker.getCurrentHour());
-        // Получение запроса от потребителя
-        ACLMessage RequestFromConsumer = null;
-        while (RequestFromConsumer == null) {
-            RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("RequestFromConsumer"));
-        }
 
         // Сохраняем информацию о величине закупаемой мощности
         String content = RequestFromConsumer.getContent();
@@ -35,6 +34,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
             message.addReceiver(new AID(aid.getLocalName(), false));
         }
         getAgent().send(message);
+        System.out.println("3    Провайдер опрашивает производителей об их доступной мощности");
 
         // Ожидание ответов от производителей с информацией о возможности их участия в аукционе
         // Производителей с доступной мощностью заносим в лист
@@ -43,6 +43,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
         while (counter < 3) {
             ACLMessage AnsFromProducer = getAgent().receive(MessageTemplate.MatchConversationId("AnsFromProducer"));
             if (AnsFromProducer != null) {
+                System.out.println("6    Провайдер получает ответ от производителей по поводу их доступной мощности");
                 counter++;
                 String ans = AnsFromProducer.getContent();
                 if (ans.equals("HavePower")) {
@@ -50,7 +51,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
                 }
             }
         }
-        System.out.println("Список участников из ReicieveRequest: " + TheyHavePower);
+        System.out.println(TheyHavePower);
         ProviderFSM.setAuctionParticipants(TheyHavePower); // Для передачи списка участников дальше по поведениям
         //Если нашлись агенты с доступной мощностью, отправляем им приглашение, содержащее имя топика
         if (!TheyHavePower.isEmpty()) {
@@ -61,6 +62,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
                 invite.addReceiver(new AID(s, false));
             }
             getAgent().send(invite);
+            System.out.println("7    Провайдер отправляет ПОДХОДЯЩИМ производителям название топика для участия в аукционе");
             isInvitesSend = true;
         }
     }

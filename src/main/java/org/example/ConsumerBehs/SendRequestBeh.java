@@ -18,7 +18,6 @@ public class SendRequestBeh extends OneShotBehaviour { // Отправка за�
 
     @Override
     public void action() {
-        System.out.println("Поведение SendRequestBeh запускается" + TimeTracker.getCurrentHour());
         Random random = new Random();
         int min = 4;
         int max = 6;
@@ -40,5 +39,6 @@ public class SendRequestBeh extends OneShotBehaviour { // Отправка за�
         AID receiver = new AID("ProviderOf" + getAgent().getLocalName(), false);
         message.addReceiver(receiver);
         getAgent().send(message);
+        System.out.println("1    Потребитель отправляет запрос провайдеру");
     }
 }

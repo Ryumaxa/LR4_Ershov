@@ -11,17 +11,19 @@ import org.example.HelperClasses.TopicHelper;
 public class GoToAuctionBeh extends OneShotBehaviour {
     AID topic;
     double minPrice; //= ProducersFunctions.getPPminPrice(getAgent().getLocalName());
-    double currentPrice = minPrice * 2;
+    double currentPrice;
     boolean isImWinner = false;
 
     @Override
     public void onStart() {
         minPrice = ProducersFunctions.getPPminPrice(getAgent().getLocalName());
+        currentPrice = minPrice * 2;
         // Подключаемся к топику при получении приглашения
         ACLMessage invite = null;
         while (invite == null) {
             invite = getAgent().receive(MessageTemplate.MatchConversationId("InviteToAuction"));
         }
+        System.out.println("8    Производитель получает название топика от провайдера");
         try {
             topic = TopicHelper.register(getAgent(), invite.getContent());
         } catch (ServiceException e) {
@@ -32,6 +34,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         myFirstBid.addReceiver(topic);
         myFirstBid.setContent(currentPrice + "");
         getAgent().send(myFirstBid);
+        System.out.println("9    Производитель отправляет стартовую цену в топик:" + myFirstBid.getContent());
     }
     @Override
     public void action() {
@@ -40,15 +43,15 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         while (stopper == null) {
             ACLMessage otherBids = getAgent().receive(MessageTemplate.MatchConversationId("ProducerBid"));
             if (otherBids != null && !otherBids.getSender().equals(getAgent().getAID()) && Double.parseDouble(otherBids.getContent()) < currentPrice && Double.parseDouble(otherBids.getContent()) > minPrice) {
-                System.out.println(otherBids.getContent());
+                System.out.println("10    Производитель получает цены своих коллег");
                 currentPrice = Double.parseDouble(otherBids.getContent()) * (0.9 + Math.random() * 0.05);
                 ACLMessage myBid = new ACLMessage(ACLMessage.INFORM);
                 myBid.setConversationId("ProducerBid");
                 myBid.addReceiver(topic);
                 myBid.setContent(currentPrice + "");
-                System.out.println(currentPrice);
 
                 getAgent().send(myBid);
+                System.out.println("11    Производитель отправляет новую цену:" + myBid.getContent());
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
@@ -57,9 +60,9 @@ public class GoToAuctionBeh extends OneShotBehaviour {
             }
             stopper = getAgent().receive(MessageTemplate.MatchConversationId("Stopper"));
         }
-        System.out.println("STOPPER CONTENT = " + stopper);
         //Если этот производитель победил в аукционе
         if (stopper.getContent() != null && stopper.getContent().equals(getAgent().getName())) {
+            System.out.println("14    Производители получили стоппер");
             isImWinner = true;
         }
     }

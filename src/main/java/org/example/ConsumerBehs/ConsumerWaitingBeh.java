@@ -13,6 +13,7 @@ public class ConsumerWaitingBeh extends Behaviour { // СЧИТАЮ ЭТО ПО�
         // Ожидает результат аукциона от своего поставщика
         ACLMessage AuctionResults = getAgent().receive(MessageTemplate.MatchConversationId("AuctionResults"));
         if (AuctionResults != null) {
+            System.out.println("20    Потребитель получает отчет от провайдера");
             ansReceived = true;
             String content = AuctionResults.getContent();
             String[] values = content.split(";");
@@ -24,6 +25,7 @@ public class ConsumerWaitingBeh extends Behaviour { // СЧИТАЮ ЭТО ПО�
                 String winner = values[3];
                 System.out.println(getAgent().getLocalName() + " успешно закупил " + requiredPower + " кВт*ч по цене " + price + " руб. за кВт*ч у " + winner + ", час = " + TimeTracker.getCurrentHour());
             } else {
+                result = "fail";
                 System.out.println("Неудачная попытка закупки мощности за " + TimeTracker.getCurrentHour() + " час");
             }
         }

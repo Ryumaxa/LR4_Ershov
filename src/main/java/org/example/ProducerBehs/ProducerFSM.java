@@ -19,7 +19,7 @@ public class ProducerFSM extends FSMBehaviour {
         this.registerLastState(new OneShotBehaviour() {
             @Override
             public void action() {
-                System.out.println("Аукцион завершен для " + getAgent().getLocalName());
+                //System.out.println("Аукцион завершен для " + getAgent().getLocalName());
             }
         }, END);
 

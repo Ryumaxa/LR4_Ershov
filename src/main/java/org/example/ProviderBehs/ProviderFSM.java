@@ -37,13 +37,13 @@ public class ProviderFSM extends FSMBehaviour {
 
     private static final String RECEIVE_REQUEST = "receiveRequest", START_AUCTION = "startAuction", SEND_CONTRACT = "sendContract", END = "end";
     public void onStart() {
-        this.registerFirstState(new ReceiveRequestBeh(), RECEIVE_REQUEST); // OneShotBehaviour с ожиданием запроса от потребителя. Возвращает 1 или 0 в зависимости от успешности поиска производителей
+        this.registerFirstState(new ReceiveRequestBeh(RequestFromCons), RECEIVE_REQUEST); // OneShotBehaviour с ожиданием запроса от потребителя. Возвращает 1 или 0 в зависимости от успешности поиска производителей
         this.registerState(new StartAuctionBeh(), START_AUCTION); // Поведение создания топика и начала прочитывания сообщений в нем
         this.registerLastState(new SendContractBeh(), SEND_CONTRACT); // Отправка контракта
         this.registerLastState(new OneShotBehaviour() {
             @Override
             public void action() {
-                System.out.println("Не нашлось откликнувшихся участников " + getAgent().getLocalName());
+                //System.out.println("Не нашлось откликнувшихся участников " + getAgent().getLocalName());
             }
         }, END);
 

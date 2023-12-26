@@ -11,7 +11,7 @@ public class ProducersFunctions {
             WindPPowerGraphic.put(i, random.nextGaussian() * B2 + B1);
         }
     }
-    static final Double A = 8.1 + 20; // УДАЛИТЬ ОТСЮДА 20
+    static final Double A = 8.1;
     static final Double B1 = 5.8;
     static final Double B2 = 7.2;
     static final Double C0 = -81.355;
@@ -22,9 +22,9 @@ public class ProducersFunctions {
 
     public static double ProducerFunc (String name) {
         double resultPower = switch (name) {
-            case "HeatPP" -> A;
-            case "WindPP" -> generateRandomValue(); // ПОЧЕМУ МОЖЕТ УХОДИТЬ В МИНУС ??????????????
-            case "SolarPP" -> solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY);
+            case "HeatPP" -> A * 10;
+            case "WindPP" -> generateRandomValue() * 10; // УДАЛИТЬ ИЗ МЕТОДА * 10
+            case "SolarPP" -> solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY) * 10;
             default -> 0.0;
         };
         return resultPower;
