@@ -48,7 +48,7 @@ public class ProducersFunctions {
 
     public static double getPPminPrice (String name) {
         double minPrice = switch (name) {
-            case "HeatPP" -> 3.0;
+            case "HeatPP" -> 2.4;
             case "WindPP" -> generateWindPPPrice();
             case "SolarPP" -> generateSolarPPPrice();
             default -> 100;
@@ -58,15 +58,15 @@ public class ProducersFunctions {
     public static double generateWindPPPrice () {
         double minPrice;
         if (generateRandomValue() >= B1) {
-            minPrice = 3;
+            minPrice = 2.5;
         } else {
-            minPrice = 3.4;
+            minPrice = 2.8;
         }
         return minPrice;
     }
 
     public static double generateSolarPPPrice () {
-        return 3 + (1/solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY));
+        return 2 + (1/solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY));
     }
 
 

@@ -34,7 +34,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
             message.addReceiver(new AID(aid.getLocalName(), false));
         }
         getAgent().send(message);
-        System.out.println("3    Провайдер опрашивает производителей об их доступной мощности");
+        System.out.println(TimeTracker.getCurrentHour() +".3    Провайдер" + getAgent().getLocalName() + " опрашивает производителей об их доступной мощности " + Found_Producers);
 
         // Ожидание ответов от производителей с информацией о возможности их участия в аукционе
         // Производителей с доступной мощностью заносим в лист
@@ -43,7 +43,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
         while (counter < 3) {
             ACLMessage AnsFromProducer = getAgent().receive(MessageTemplate.MatchConversationId("AnsFromProducer"));
             if (AnsFromProducer != null) {
-                System.out.println("6    Провайдер получает ответ от производителей по поводу их доступной мощности");
+                System.out.println(TimeTracker.getCurrentHour() +".6    Провайдер " + getAgent().getLocalName() + " получает ответ от производителя " + AnsFromProducer.getSender().getLocalName() + " по поводу его доступной мощности ");
                 counter++;
                 String ans = AnsFromProducer.getContent();
                 if (ans.equals("HavePower")) {
@@ -62,7 +62,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
                 invite.addReceiver(new AID(s, false));
             }
             getAgent().send(invite);
-            System.out.println("7    Провайдер отправляет ПОДХОДЯЩИМ производителям название топика для участия в аукционе");
+            System.out.println(TimeTracker.getCurrentHour() +".7    Провайдер " + getAgent().getLocalName() + " отправляет ПОДХОДЯЩИМ производителям" + TheyHavePower + " название топика для участия в аукционе " + invite.getContent());
             isInvitesSend = true;
         }
     }

@@ -12,6 +12,7 @@ import org.example.Agents.ProviderAgent;
 import org.example.HelperClasses.ProducersFunctions;
 import org.example.HelperClasses.TimeTracker;
 
+import java.util.List;
 import java.util.Properties;
 
 public class Main {

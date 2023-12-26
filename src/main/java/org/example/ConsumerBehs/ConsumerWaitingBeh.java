@@ -13,11 +13,11 @@ public class ConsumerWaitingBeh extends Behaviour { // СЧИТАЮ ЭТО ПО�
         // Ожидает результат аукциона от своего поставщика
         ACLMessage AuctionResults = getAgent().receive(MessageTemplate.MatchConversationId("AuctionResults"));
         if (AuctionResults != null) {
-            System.out.println("20    Потребитель получает отчет от провайдера");
+            System.out.println(TimeTracker.getCurrentHour() +".20    Потребитель получает отчет от провайдера");
             ansReceived = true;
             String content = AuctionResults.getContent();
             String[] values = content.split(";");
-            if (values.length > 1) {
+            if (values.length == 4) {
                 // Если аукцион завершился успешно, сообщение будет содержать полную информацию
                 result = values[0];
                 double requiredPower = Double.parseDouble(values[1]);

@@ -4,6 +4,7 @@ import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +16,20 @@ public class ProviderFSM extends FSMBehaviour {
     }
 
     @Getter
+    @Setter
     private static List<String> AuctionParticipants = new ArrayList<>(); // Лист участников
-    public static void setAuctionParticipants(List<String> auctionParticipants) {
-        AuctionParticipants = auctionParticipants;
-    }
+
     @Getter
+    @Setter
     private static String winnerName; // Имя победителя
-    public static void setWinnerName(String winnerName) {
-        ProviderFSM.winnerName = winnerName;
-    }
+
     @Getter
+    @Setter
     private static double powerInfo; // Закупленная мощность
-    public static void setPowerInfo(double powerInfo) {
-        ProviderFSM.powerInfo = powerInfo;
-    }
+
     @Getter
+    @Setter
     private static double priceInfo;
-    public static void setPriceInfo(double priceInfo) {
-        ProviderFSM.priceInfo = priceInfo;
-    }
 
     private static final String RECEIVE_REQUEST = "receiveRequest", START_AUCTION = "startAuction", SEND_CONTRACT = "sendContract", END = "end";
     public void onStart() {

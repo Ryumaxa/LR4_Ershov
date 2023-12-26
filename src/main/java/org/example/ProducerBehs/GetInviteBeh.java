@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import org.example.HelperClasses.ProducersFunctions;
+import org.example.HelperClasses.TimeTracker;
 
 public class GetInviteBeh extends Behaviour {
     private ACLMessage RequestFromCons;
@@ -35,7 +36,7 @@ public class GetInviteBeh extends Behaviour {
         }
         answer.addReceiver(new AID(RequestFromCons.getSender().getLocalName(), false));
         getAgent().send(answer);
-        System.out.println("5    Производитель отвечает провайдеру по поводу наличия у него мощности: " + answer.getContent() + " полагая, что " + ProducersFunctions.ProducerFunc(getAgent().getLocalName()) + " > " + RequiredPower);
+        System.out.println(TimeTracker.getCurrentHour() +".5    Производитель" + getAgent().getLocalName() + " отвечает провайдеру " + RequestFromCons.getSender().getLocalName() + " по поводу наличия у него мощности: " + answer.getContent() + " полагая, что " + ProducersFunctions.ProducerFunc(getAgent().getLocalName()) + " > " + RequiredPower);
 //            isAnswerSend = true;
 //        counter1++;
         counter1 = 5;

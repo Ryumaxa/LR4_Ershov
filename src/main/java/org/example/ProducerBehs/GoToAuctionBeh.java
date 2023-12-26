@@ -6,6 +6,7 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.ProducersFunctions;
+import org.example.HelperClasses.TimeTracker;
 import org.example.HelperClasses.TopicHelper;
 
 public class GoToAuctionBeh extends OneShotBehaviour {
@@ -23,7 +24,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         while (invite == null) {
             invite = getAgent().receive(MessageTemplate.MatchConversationId("InviteToAuction"));
         }
-        System.out.println("8    Производитель получает название топика от провайдера");
+        System.out.println(TimeTracker.getCurrentHour() +".8    Производитель " + getAgent().getLocalName() + " получает название топика " + invite.getContent() + " от провайдера " + invite.getSender().getLocalName());
         try {
             topic = TopicHelper.register(getAgent(), invite.getContent());
         } catch (ServiceException e) {
@@ -34,7 +35,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         myFirstBid.addReceiver(topic);
         myFirstBid.setContent(currentPrice + "");
         getAgent().send(myFirstBid);
-        System.out.println("9    Производитель отправляет стартовую цену в топик:" + myFirstBid.getContent());
+        System.out.println(TimeTracker.getCurrentHour() +".9    Производитель" + getAgent().getLocalName() + " отправляет стартовую цену " + myFirstBid.getContent() + " в топик: " + topic.getLocalName());
     }
     @Override
     public void action() {
@@ -43,7 +44,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         while (stopper == null) {
             ACLMessage otherBids = getAgent().receive(MessageTemplate.MatchConversationId("ProducerBid"));
             if (otherBids != null && !otherBids.getSender().equals(getAgent().getAID()) && Double.parseDouble(otherBids.getContent()) < currentPrice && Double.parseDouble(otherBids.getContent()) > minPrice) {
-                System.out.println("10    Производитель получает цены своих коллег");
+                System.out.println(TimeTracker.getCurrentHour() +".10    Производитель" + getAgent().getLocalName() + " получает цены своих коллег ");
                 currentPrice = Double.parseDouble(otherBids.getContent()) * (0.9 + Math.random() * 0.05);
                 ACLMessage myBid = new ACLMessage(ACLMessage.INFORM);
                 myBid.setConversationId("ProducerBid");
@@ -51,18 +52,22 @@ public class GoToAuctionBeh extends OneShotBehaviour {
                 myBid.setContent(currentPrice + "");
 
                 getAgent().send(myBid);
-                System.out.println("11    Производитель отправляет новую цену:" + myBid.getContent());
+                System.out.println(TimeTracker.getCurrentHour() +".11    Производитель" + getAgent().getLocalName() + " отправляет новую цену:" + myBid.getContent() + " в топик " + topic.getLocalName());
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
+//            ACLMessage stopper_mes = getAgent().receive(MessageTemplate.MatchConversationId("Stopper"));
+//            if (stopper_mes != null) {
+//                stopper = stopper_mes;
+//            }
             stopper = getAgent().receive(MessageTemplate.MatchConversationId("Stopper"));
         }
         //Если этот производитель победил в аукционе
-        if (stopper.getContent() != null && stopper.getContent().equals(getAgent().getName())) {
-            System.out.println("14    Производители получили стоппер");
+        if (stopper.getContent().equals(getAgent().getLocalName())) {
+            System.out.println(TimeTracker.getCurrentHour() +".14    Производители получили стоппер");
             isImWinner = true;
         }
     }

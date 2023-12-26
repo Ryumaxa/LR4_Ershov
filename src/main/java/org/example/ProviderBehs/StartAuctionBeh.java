@@ -13,7 +13,7 @@ import java.util.List;
 public class StartAuctionBeh extends Behaviour {
     boolean winnerHasFound = false;
     double bestPrice = 100;
-    String winnerName;
+    String winnerName = "";
     AID topic;
     @Override
     public void onStart() {
@@ -30,24 +30,29 @@ public class StartAuctionBeh extends Behaviour {
         // Получение ставок и перезапись лучшей ставки и потенциального победителя
         ACLMessage mesFromTopic = getAgent().receive(MessageTemplate.MatchTopic(topic));
         if (mesFromTopic != null) {
-            System.out.println("12    Провайдер получает цены производителей");
+            System.out.println(TimeTracker.getCurrentHour() +".12    Провайдер" + getAgent().getLocalName() + " получает цены производителей ");
             if (Double.parseDouble(mesFromTopic.getContent()) < bestPrice) {
                 bestPrice = Double.parseDouble(mesFromTopic.getContent());
                 winnerName = mesFromTopic.getSender().getLocalName();
+                System.out.println(winnerName);
             }
         }
-        if (TimeTracker.getMillsUntilNextHour() < 500) { // Завершение аукциона по таймеру
+        if (TimeTracker.getMillsUntilNextHour() < 300) { // Завершение аукциона по таймеру
             ACLMessage stopper = new ACLMessage(ACLMessage.INFORM);
             stopper.setConversationId("Stopper");
             stopper.setContent(winnerName);
             ProviderFSM.setWinnerName(winnerName);
             List<String> Participants = ProviderFSM.getAuctionParticipants();
+            System.out.println("PARTICIPANTS" + Participants);
 
             for (String agentName : Participants) {
                 stopper.addReceiver(new AID(agentName, false));
             }
+
             getAgent().send(stopper);
-            System.out.println("13    Провайдер останавливает аукцион по таймеру и отправляет производителям стоппер - победил " + winnerName);
+
+
+            System.out.println(TimeTracker.getCurrentHour() +".13    Провайдер" + getAgent().getLocalName() + " останавливает аукцион по таймеру и отправляет производителям стоппер - победил " + winnerName);
             winnerHasFound = true;
         }
     }
@@ -61,6 +66,7 @@ public class StartAuctionBeh extends Behaviour {
     @Override
     public int onEnd() {
         ProviderFSM.setPriceInfo(bestPrice);
+        ProviderFSM.setWinnerName(winnerName);
         return super.onEnd();
     }
 }
