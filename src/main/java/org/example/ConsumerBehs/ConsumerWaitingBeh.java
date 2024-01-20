@@ -3,8 +3,10 @@ package org.example.ConsumerBehs;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.example.HelperClasses.TimeTracker;
 
+@Slf4j
 public class ConsumerWaitingBeh extends Behaviour { // СЧИТАЮ ЭТО ПОВЕДЕНИЕ РАБОЧИМ
     String result = null;
     boolean ansReceived = false;
@@ -23,7 +25,7 @@ public class ConsumerWaitingBeh extends Behaviour { // СЧИТАЮ ЭТО ПО�
                 double requiredPower = Double.parseDouble(values[1]);
                 double price = Double.parseDouble(values[2]);
                 String winner = values[3];
-                System.out.println(getAgent().getLocalName() + " успешно закупил " + requiredPower + " кВт*ч по цене " + price + " руб. за кВт*ч у " + winner + ", час = " + TimeTracker.getCurrentHour());
+                System.out.println("!!! " + getAgent().getLocalName() + " успешно закупил " + requiredPower + " кВт*ч по цене " + price + " руб. за кВт*ч у " + winner + ", час = " + TimeTracker.getCurrentHour());
             } else {
                 result = "fail";
                 System.out.println("Неудачная попытка закупки мощности за " + TimeTracker.getCurrentHour() + " час");

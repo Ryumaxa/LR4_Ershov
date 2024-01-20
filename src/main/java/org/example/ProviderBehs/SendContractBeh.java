@@ -9,8 +9,10 @@ import org.example.HelperClasses.TimeTracker;
 public class SendContractBeh extends Behaviour {
     boolean isReady = false;
     boolean haveAccept = false;
+    long time1;
     @Override
     public void onStart() {
+        time1 = TimeTracker.getMillsUntilNextHour();
         if (ProviderFSM.getWinnerName() != null) {
             // Отправка контракта победителю
             ACLMessage contractMessage = new ACLMessage(ACLMessage.INFORM);
@@ -38,7 +40,7 @@ public class SendContractBeh extends Behaviour {
     @Override
     public boolean done() {
         // Если получен ответ на контракт или превышено время ожидания
-        return (isReady || TimeTracker.getMillsUntilNextHour() < 50);
+        return (isReady || time1 - TimeTracker.getMillsUntilNextHour() >= 100);
     }
 
     @Override

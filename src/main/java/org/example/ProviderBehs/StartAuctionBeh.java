@@ -15,8 +15,10 @@ public class StartAuctionBeh extends Behaviour {
     double bestPrice = 100;
     String winnerName = "";
     AID topic;
+    long time1;
     @Override
     public void onStart() {
+        time1 = TimeTracker.getMillsUntilNextHour();
         // Тут создается топик с соответствующим именем
         try {
             topic = TopicHelper.register(getAgent(), "Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour());
@@ -37,7 +39,7 @@ public class StartAuctionBeh extends Behaviour {
                 System.out.println(winnerName);
             }
         }
-        if (TimeTracker.getMillsUntilNextHour() < 300) { // Завершение аукциона по таймеру
+        if (time1 - TimeTracker.getMillsUntilNextHour() >= 1000) { // Завершение аукциона по таймеру
             ACLMessage stopper = new ACLMessage(ACLMessage.INFORM);
             stopper.setConversationId("Stopper");
             stopper.setContent(winnerName);
