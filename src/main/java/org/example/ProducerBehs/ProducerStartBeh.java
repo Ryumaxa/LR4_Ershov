@@ -12,7 +12,7 @@ public class ProducerStartBeh extends Behaviour {
     public void action() {
         ACLMessage RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("IsPowerAvailable"));
         if (RequestFromConsumer != null) {
-            System.out.println(TimeTracker.getCurrentHour() +".4    Производитель" + getAgent().getLocalName() + " получает вопрос о наличии мощности от провайдера " + RequestFromConsumer.getSender().getLocalName());
+            System.out.println(TimeTracker.getCurrentHour() +"..4    Производитель" + getAgent().getLocalName() + " получает вопрос о наличии мощности от провайдера " + RequestFromConsumer.getSender().getLocalName());
 //            FSMBehaviour fsmBehaviour = new ProducerFSM(RequestFromConsumer);
 //            fsmBehaviour.reset();
 //            getAgent().addBehaviour(fsmBehaviour);

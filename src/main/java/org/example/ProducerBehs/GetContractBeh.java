@@ -11,7 +11,7 @@ public class GetContractBeh extends Behaviour {
     public void action() {
         ACLMessage messageContract = getAgent().receive(MessageTemplate.MatchConversationId("Contract"));
         if (messageContract != null) {
-            System.out.println(TimeTracker.getCurrentHour() +".16    Производитель получает контракт");
+            System.out.println(TimeTracker.getCurrentHour() +"..16    Производитель получает контракт");
             ACLMessage ansToContract = new ACLMessage(ACLMessage.INFORM);
             ansToContract.setConversationId("ReactionForContract");
             // С вероятностью 95% контракт будет принят
@@ -22,7 +22,7 @@ public class GetContractBeh extends Behaviour {
             }
             ansToContract.addReceiver(new AID(messageContract.getSender().getLocalName(), false));
             getAgent().send(ansToContract);
-            System.out.println(TimeTracker.getCurrentHour() +".17    Производитель отвечает на контракт");
+            System.out.println(TimeTracker.getCurrentHour() +"..17    Производитель отвечает на контракт");
         }
     }
 

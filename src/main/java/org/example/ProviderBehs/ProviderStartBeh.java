@@ -14,7 +14,7 @@ public class ProviderStartBeh extends Behaviour {
     public void action() {
         ACLMessage RequestFromConsumer = getAgent().receive(MessageTemplate.MatchConversationId("RequestFromConsumer"));
         if (RequestFromConsumer != null) {
-            System.out.println(TimeTracker.getCurrentHour() +".2    Провайдер" + getAgent().getLocalName() + " получает запрос от потребителя " + RequestFromConsumer.getSender().getLocalName());
+            System.out.println(TimeTracker.getCurrentHour() +"..2    Провайдер" + getAgent().getLocalName() + " получает запрос от потребителя " + RequestFromConsumer.getSender().getLocalName());
 //            FSMBehaviour fsmBehaviour = new ProviderFSM(RequestFromConsumer);
 ////            fsmBehaviour.reset();
 //            getAgent().addBehaviour(fsmBehaviour);

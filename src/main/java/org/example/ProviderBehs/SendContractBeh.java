@@ -25,7 +25,7 @@ public class SendContractBeh extends Behaviour {
             contractMessage.setContent("YouHaveNewContract");
             contractMessage.addReceiver(new AID(winnerName, false));
             getAgent().send(contractMessage);
-            System.out.println(TimeTracker.getCurrentHour() +".15    Провайдер" + getAgent().getLocalName() + " отправляет контракт победителю " + winnerName);
+            System.out.println(TimeTracker.getCurrentHour() +"..15    Провайдер" + getAgent().getLocalName() + " отправляет контракт победителю " + winnerName);
         }
 
     }
@@ -34,7 +34,7 @@ public class SendContractBeh extends Behaviour {
     public void action() {
         ACLMessage LastWordOfProducer = getAgent().receive(MessageTemplate.MatchConversationId("ReactionForContract"));
         if (LastWordOfProducer != null) {
-            System.out.println(TimeTracker.getCurrentHour() +".18    Провайдер получает ответ на контракт от производителя " + LastWordOfProducer.getContent());
+            System.out.println(TimeTracker.getCurrentHour() +"..18    Провайдер получает ответ на контракт от производителя " + LastWordOfProducer.getContent());
             isReady = true;
             if (LastWordOfProducer.getContent().equals("OK")) {
                 haveAccept = true;
@@ -64,7 +64,7 @@ public class SendContractBeh extends Behaviour {
             AnsToConsumer.setContent("fail");
         }
         getAgent().send(AnsToConsumer);
-        System.out.println(TimeTracker.getCurrentHour() +".19    Провайдер отправляет отчет потребителю " + AnsToConsumer.getContent());
+        System.out.println(TimeTracker.getCurrentHour() +"..19    Провайдер отправляет отчет потребителю " + AnsToConsumer.getContent());
         return super.onEnd();
     }
 }

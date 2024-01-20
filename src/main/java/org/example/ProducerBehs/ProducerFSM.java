@@ -28,4 +28,10 @@ public class ProducerFSM extends FSMBehaviour {
         this.registerTransition(GET_INVITE, END, 0);
         this.registerTransition(GOTO_AUCTION, END, 0);
     }
+    public int onEnd() {
+        // Удаление поведения ProducerFSM
+        getAgent().removeBehaviour(this);
+        return super.onEnd();
+    }
+
 }

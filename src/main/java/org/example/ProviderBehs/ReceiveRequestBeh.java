@@ -42,7 +42,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
             message.addReceiver(new AID(aid.getLocalName(), false));
         }
         getAgent().send(message);
-        System.out.println(TimeTracker.getCurrentHour() +".3    Провайдер" + getAgent().getLocalName() + " опрашивает производителей об их доступной мощности " + Found_Producers);
+        System.out.println(TimeTracker.getCurrentHour() +"..3    Провайдер" + getAgent().getLocalName() + " опрашивает производителей об их доступной мощности " + Found_Producers);
 
         // Ожидание ответов от производителей с информацией о возможности их участия в аукционе
         // Производителей с доступной мощностью заносим в лист
@@ -51,7 +51,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
         while (counter < 3) {
             ACLMessage AnsFromProducer = getAgent().receive(MessageTemplate.MatchConversationId("AnsFromProducer"));
             if (AnsFromProducer != null) {
-                System.out.println(TimeTracker.getCurrentHour() +".6    Провайдер " + getAgent().getLocalName() + " получает ответ от производителя " + AnsFromProducer.getSender().getLocalName() + " по поводу его доступной мощности ");
+                System.out.println(TimeTracker.getCurrentHour() +"..6    Провайдер " + getAgent().getLocalName() + " получает ответ от производителя " + AnsFromProducer.getSender().getLocalName() + " по поводу его доступной мощности ");
                 counter++;
                 String ans = AnsFromProducer.getContent();
                 if (ans.equals("HavePower")) {
@@ -75,13 +75,23 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
                 invite.addReceiver(new AID(s, false));
             }
             getAgent().send(invite);
-            System.out.println(TimeTracker.getCurrentHour() +".7    Провайдер " + getAgent().getLocalName() + " отправляет ПОДХОДЯЩИМ производителям" + TheyHavePower + " название топика для участия в аукционе " + invite.getContent());
+            System.out.println(TimeTracker.getCurrentHour() +"..7    Провайдер " + getAgent().getLocalName() + " отправляет ПОДХОДЯЩИМ производителям" + TheyHavePower + " название топика для участия в аукционе " + invite.getContent());
             isInvitesSend = true;
         }
     }
 
     // Если нашлись получатели для приглашения на аукцион, возвращаем 1
     public int onEnd() {
+
+        if (!isInvitesSend) {
+            ACLMessage AnsToConsumer = new ACLMessage(ACLMessage.INFORM);
+            AnsToConsumer.setConversationId("AuctionResults");
+            AnsToConsumer.addReceiver(new AID(getAgent().getLocalName().replace("ProviderOf", ""), false));
+            AnsToConsumer.setContent("fail");
+            getAgent().send(AnsToConsumer);
+            System.out.println(TimeTracker.getCurrentHour() +"..19    Провайдер отправляет отчет потребителю " + "fail");
+        }
+
         return isInvitesSend ? 1 : 0;
     }
 }

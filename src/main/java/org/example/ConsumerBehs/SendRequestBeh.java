@@ -39,6 +39,6 @@ public class SendRequestBeh extends OneShotBehaviour { // Отправка за�
         AID receiver = new AID("ProviderOf" + getAgent().getLocalName(), false);
         message.addReceiver(receiver);
         getAgent().send(message);
-        System.out.println(TimeTracker.getCurrentHour() +".1    Потребитель отправляет запрос провайдеру " + receiver.getLocalName());
+        System.out.println(TimeTracker.getCurrentHour() +"..1    Потребитель отправляет запрос провайдеру " + receiver.getLocalName());
     }
 }

@@ -24,7 +24,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         while (invite == null) {
             invite = getAgent().receive(MessageTemplate.MatchConversationId("InviteToAuction"));
         }
-        System.out.println(TimeTracker.getCurrentHour() +".8    Производитель " + getAgent().getLocalName() + " получает название топика " + invite.getContent() + " от провайдера " + invite.getSender().getLocalName());
+        System.out.println(TimeTracker.getCurrentHour() +"..8    Производитель " + getAgent().getLocalName() + " получает название топика " + invite.getContent() + " от провайдера " + invite.getSender().getLocalName());
         try {
             topic = TopicHelper.register(getAgent(), invite.getContent());
         } catch (ServiceException e) {
@@ -35,7 +35,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         myFirstBid.addReceiver(topic);
         myFirstBid.setContent(currentPrice + "");
         getAgent().send(myFirstBid);
-        System.out.println(TimeTracker.getCurrentHour() +".9    Производитель" + getAgent().getLocalName() + " отправляет стартовую цену " + myFirstBid.getContent() + " в топик: " + topic.getLocalName());
+        System.out.println(TimeTracker.getCurrentHour() +"..9    Производитель" + getAgent().getLocalName() + " отправляет стартовую цену " + myFirstBid.getContent() + " в топик: " + topic.getLocalName());
     }
     @Override
     public void action() {
@@ -44,7 +44,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         while (stopper == null) {
             ACLMessage otherBids = getAgent().receive(MessageTemplate.MatchConversationId("ProducerBid"));
             if (otherBids != null && !otherBids.getSender().equals(getAgent().getAID()) && Double.parseDouble(otherBids.getContent()) < currentPrice && Double.parseDouble(otherBids.getContent()) > minPrice) {
-                System.out.println(TimeTracker.getCurrentHour() +".10    Производитель" + getAgent().getLocalName() + " получает цены своих коллег ");
+                System.out.println(TimeTracker.getCurrentHour() +"..10    Производитель" + getAgent().getLocalName() + " получает цены своих коллег ");
                 currentPrice = Double.parseDouble(otherBids.getContent()) * (0.9 + Math.random() * 0.05);
                 ACLMessage myBid = new ACLMessage(ACLMessage.INFORM);
                 myBid.setConversationId("ProducerBid");
@@ -52,7 +52,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
                 myBid.setContent(currentPrice + "");
 
                 getAgent().send(myBid);
-                System.out.println(TimeTracker.getCurrentHour() +".11    Производитель" + getAgent().getLocalName() + " отправляет новую цену:" + myBid.getContent() + " в топик " + topic.getLocalName());
+                System.out.println(TimeTracker.getCurrentHour() +"..11    Производитель" + getAgent().getLocalName() + " отправляет новую цену:" + myBid.getContent() + " в топик " + topic.getLocalName());
                 try {
                     Thread.sleep(5);
                 } catch (InterruptedException e) {
@@ -67,7 +67,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
         }
         //Если этот производитель победил в аукционе
         if (stopper.getContent().equals(getAgent().getLocalName())) {
-            System.out.println(TimeTracker.getCurrentHour() +".14    Производители получили стоппер");
+            System.out.println(TimeTracker.getCurrentHour() +"..14    Производители получили стоппер");
             isImWinner = true;
         }
     }

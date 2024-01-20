@@ -15,7 +15,7 @@ public class ConsumerWaitingBeh extends Behaviour { // СЧИТАЮ ЭТО ПО�
         // Ожидает результат аукциона от своего поставщика
         ACLMessage AuctionResults = getAgent().receive(MessageTemplate.MatchConversationId("AuctionResults"));
         if (AuctionResults != null) {
-            System.out.println(TimeTracker.getCurrentHour() +".20    Потребитель получает отчет от провайдера");
+            System.out.println(TimeTracker.getCurrentHour() +"..20    Потребитель получает отчет от провайдера");
             ansReceived = true;
             String content = AuctionResults.getContent();
             String[] values = content.split(";");

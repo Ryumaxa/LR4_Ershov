@@ -33,18 +33,18 @@ public class StartAuctionBeh extends Behaviour {
         // Получение ставок и перезапись лучшей ставки и потенциального победителя
         ACLMessage mesFromTopic = getAgent().receive(MessageTemplate.MatchTopic(topic));
         if (mesFromTopic != null) {
-            System.out.println(TimeTracker.getCurrentHour() +".12    Провайдер" + getAgent().getLocalName() + " получает цены производителей ");
+            System.out.println(TimeTracker.getCurrentHour() +"..12    Провайдер" + getAgent().getLocalName() + " получает цены производителей " + time1 + " - " + TimeTracker.getMillsUntilNextHour() + " = " + (time1 - TimeTracker.getMillsUntilNextHour()));
             if (Double.parseDouble(mesFromTopic.getContent()) < bestPrice) {
                 bestPrice = Double.parseDouble(mesFromTopic.getContent());
                 winnerName = mesFromTopic.getSender().getLocalName();
                 System.out.println(winnerName);
             }
         }
-        if (time1 - TimeTracker.getMillsUntilNextHour() >= 1000) { // Завершение аукциона по таймеру
+        if (time1 - TimeTracker.getMillsUntilNextHour() >= 100) { // Завершение аукциона по таймеру
             ACLMessage stopper = new ACLMessage(ACLMessage.INFORM);
             stopper.setConversationId("Stopper");
             stopper.setContent(winnerName);
-            //ProviderFSM.setWinnerName(winnerName); // ЭТО УДАЛИТЬ ТОЧНО
+//            ProviderFSM.setWinnerName(winnerName); // ЭТО УДАЛИТЬ ТОЧНО
 
             //List<String> Participants = ProviderFSM.getAuctionParticipants();
             List<String> Participants = (List<String>)(((HashMap<String, Object>)getAgent().getArguments()[0]).get("participants"));
@@ -58,7 +58,7 @@ public class StartAuctionBeh extends Behaviour {
             getAgent().send(stopper);
 
 
-            System.out.println(TimeTracker.getCurrentHour() +".13    Провайдер" + getAgent().getLocalName() + " останавливает аукцион по таймеру и отправляет производителям стоппер - победил " + winnerName);
+            System.out.println(TimeTracker.getCurrentHour() +"..13    Провайдер" + getAgent().getLocalName() + " останавливает аукцион по таймеру и отправляет производителям стоппер - победил " + winnerName);
             winnerHasFound = true;
         }
     }
