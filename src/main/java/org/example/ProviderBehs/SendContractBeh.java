@@ -6,21 +6,26 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.TimeTracker;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class SendContractBeh extends Behaviour {
     boolean isReady = false;
     boolean haveAccept = false;
     long time1;
+    String winnerName = null;
     @Override
     public void onStart() {
         time1 = TimeTracker.getMillsUntilNextHour();
-        if (ProviderFSM.getWinnerName() != null) {
+        winnerName = (String)(((HashMap<String, Object>)getAgent().getArguments()[0]).get("winner"));
+        if (winnerName != null) {
             // Отправка контракта победителю
             ACLMessage contractMessage = new ACLMessage(ACLMessage.INFORM);
             contractMessage.setConversationId("Contract");
             contractMessage.setContent("YouHaveNewContract");
-            contractMessage.addReceiver(new AID(ProviderFSM.getWinnerName(), false));
+            contractMessage.addReceiver(new AID(winnerName, false));
             getAgent().send(contractMessage);
-            System.out.println(TimeTracker.getCurrentHour() +".15    Провайдер" + getAgent().getLocalName() + " отправляет контракт победителю " + ProviderFSM.getWinnerName());
+            System.out.println(TimeTracker.getCurrentHour() +".15    Провайдер" + getAgent().getLocalName() + " отправляет контракт победителю " + winnerName);
         }
 
     }
@@ -29,7 +34,7 @@ public class SendContractBeh extends Behaviour {
     public void action() {
         ACLMessage LastWordOfProducer = getAgent().receive(MessageTemplate.MatchConversationId("ReactionForContract"));
         if (LastWordOfProducer != null) {
-            System.out.println(TimeTracker.getCurrentHour() +".18    Провайдер получает ответ на контракт от производителя");
+            System.out.println(TimeTracker.getCurrentHour() +".18    Провайдер получает ответ на контракт от производителя " + LastWordOfProducer.getContent());
             isReady = true;
             if (LastWordOfProducer.getContent().equals("OK")) {
                 haveAccept = true;
@@ -49,7 +54,11 @@ public class SendContractBeh extends Behaviour {
         AnsToConsumer.setConversationId("AuctionResults");
         AnsToConsumer.addReceiver(new AID(getAgent().getLocalName().replace("ProviderOf", ""), false));
         if (haveAccept) {
-            AnsToConsumer.setContent("success;" + ProviderFSM.getPowerInfo() + ";" + ProviderFSM.getPriceInfo() + ";" + ProviderFSM.getWinnerName());
+
+            double powerInfo = (Double)(((HashMap<String, Object>)getAgent().getArguments()[0]).get("power"));
+            double priceInfo = (Double)(((HashMap<String, Object>)getAgent().getArguments()[0]).get("price"));
+
+            AnsToConsumer.setContent("success;" + powerInfo + ";" + priceInfo + ";" + winnerName);
             System.out.println(AnsToConsumer.getContent());
         } else {
             AnsToConsumer.setContent("fail");

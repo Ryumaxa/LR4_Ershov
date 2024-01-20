@@ -22,7 +22,7 @@ public class ConsumerXmlParser extends OneShotBehaviour {
             JAXBContext jaxbContext = JAXBContext.newInstance(PowerConsumptionAllData.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-            // Распарсинг XML-файла
+            // Парсинг XML-файла
             PowerConsumptionAllData powerData = (PowerConsumptionAllData) jaxbUnmarshaller.unmarshal(file);
 
             for (PowerConsumptionData data : powerData.getConsumptionDataList()) {

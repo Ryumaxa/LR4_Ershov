@@ -7,7 +7,9 @@ import org.example.HelperClasses.DfHelper;
 import org.example.HelperClasses.TimeTracker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ReceiveRequestBeh extends OneShotBehaviour {
     boolean isInvitesSend = false;
@@ -23,7 +25,13 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
         String content = RequestFromConsumer.getContent();
         String[] values = content.split(";");
         double RequiredPower = Double.parseDouble(values[0]);
-        ProviderFSM.setPowerInfo(RequiredPower);
+
+
+        //ProviderFSM.setPowerInfo(RequiredPower);
+        // Агент записал информацию о требуемой мощности
+        HashMap<String, Object> myHashMap = (HashMap<String, Object>) getAgent().getArguments()[0];
+        myHashMap.put("power", RequiredPower);
+        getAgent().setArguments(new Object[]{myHashMap});
 
         // Опрос производителей на тему доступной мощности
         List<AID> Found_Producers = DfHelper.search(getAgent(), "Produce");
@@ -52,7 +60,12 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
             }
         }
         System.out.println(TheyHavePower);
-        ProviderFSM.setAuctionParticipants(TheyHavePower); // Для передачи списка участников дальше по поведениям
+
+        //ProviderFSM.setAuctionParticipants(TheyHavePower); // Для передачи списка участников дальше по поведениям
+        // Агент записал информацию об участниках
+        myHashMap.put("participants", TheyHavePower);
+        getAgent().setArguments(new Object[]{myHashMap});
+
         //Если нашлись агенты с доступной мощностью, отправляем им приглашение, содержащее имя топика
         if (!TheyHavePower.isEmpty()) {
             ACLMessage invite = new ACLMessage(ACLMessage.INFORM);
