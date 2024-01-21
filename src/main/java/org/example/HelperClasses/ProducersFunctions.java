@@ -22,9 +22,9 @@ public class ProducersFunctions {
 
     public static double ProducerFunc (String name) {
         double resultPower = switch (name) {
-            case "HeatPP" -> A * 10;
-            case "WindPP" -> generateRandomValue() * 10; // УДАЛИТЬ ИЗ МЕТОДА * 10
-            case "SolarPP" -> solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY) * 10;
+            case "HeatPP" -> A;
+            case "WindPP" -> generateRandomValue(); // УДАЛИТЬ ИЗ МЕТОДА * 10
+            case "SolarPP" -> solarPowerCalculation(TimeTracker.getCurrentHour(), C_ARRAY);
             default -> 0.0;
         };
         return resultPower;

@@ -1,5 +1,6 @@
 package org.example.ProviderBehs;
 import jade.core.AID;
+import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -13,11 +14,18 @@ import java.util.Objects;
 
 public class ReceiveRequestBeh extends OneShotBehaviour {
     boolean isInvitesSend = false;
+    private boolean isLastTry = false;
     private ACLMessage RequestFromConsumer;
-    public ReceiveRequestBeh(ACLMessage requestFromConsumer) {
+    public ReceiveRequestBeh(boolean isLastTry, ACLMessage requestFromConsumer) {
+        this.isLastTry = isLastTry;
         RequestFromConsumer = requestFromConsumer;
     }
 
+
+    public ReceiveRequestBeh(ACLMessage requestFromConsumer) {
+        RequestFromConsumer = requestFromConsumer;
+    }
+    private FSMBehaviour divisionBeh;
     @Override
     public void action() {
 
@@ -83,13 +91,26 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
     // Если нашлись получатели для приглашения на аукцион, возвращаем 1
     public int onEnd() {
 
-        if (!isInvitesSend) {
-            ACLMessage AnsToConsumer = new ACLMessage(ACLMessage.INFORM);
-            AnsToConsumer.setConversationId("AuctionResults");
-            AnsToConsumer.addReceiver(new AID(getAgent().getLocalName().replace("ProviderOf", ""), false));
-            AnsToConsumer.setContent("fail");
-            getAgent().send(AnsToConsumer);
-            System.out.println(TimeTracker.getCurrentHour() +"..19    Провайдер отправляет отчет потребителю " + "fail");
+        if (!isInvitesSend && !isLastTry) {
+            // Деление мощности на 3 и запуск 3 поведений с делением
+            String content = RequestFromConsumer.getContent();
+            String[] values = content.split(";");
+            double RequiredPower = Double.parseDouble(values[0]);
+            RequestFromConsumer.setContent((RequiredPower/3) + "");
+            for (int i = 0; i < 3; i++) {
+                if (divisionBeh != null) {
+                    getAgent().removeBehaviour(divisionBeh);
+                }
+                divisionBeh = new DivisionFSM(RequestFromConsumer);
+                getAgent().addBehaviour(divisionBeh);
+            }
+
+//            ACLMessage AnsToConsumer = new ACLMessage(ACLMessage.INFORM);
+//            AnsToConsumer.setConversationId("AuctionResults");
+//            AnsToConsumer.addReceiver(new AID(getAgent().getLocalName().replace("ProviderOf", ""), false));
+//            AnsToConsumer.setContent("fail");
+//            getAgent().send(AnsToConsumer);
+//            System.out.println(TimeTracker.getCurrentHour() +"..19    Провайдер отправляет отчет потребителю " + "fail");
         }
 
         return isInvitesSend ? 1 : 0;
