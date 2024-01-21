@@ -61,10 +61,4 @@ public class ProviderFSM extends FSMBehaviour {
         this.registerDefaultTransition(SEND_CONTRACT, END);
         this.registerTransition(RECEIVE_REQUEST, END, 0); // Если участников не оказалось
     }
-    public int onEnd() {
-        // Удаление поведения ProducerFSM
-        getAgent().removeBehaviour(this);
-        return super.onEnd();
-    }
-
 }

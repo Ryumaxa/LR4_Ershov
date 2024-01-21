@@ -14,8 +14,8 @@ public class GetInviteBeh extends Behaviour {
     }
 
     private boolean isHavePower = false;
-//    private boolean isAnswerSend = false;
-    private int counter1 = 0;
+    private boolean isAnswerSend = false;
+//    private int counter1 = 0;
     @Override
     public void action() {
         // Получение данных от поставщика для определения возможности участия в аукционе с такими условиями
@@ -28,7 +28,7 @@ public class GetInviteBeh extends Behaviour {
             // Проверка доступности мощности для участия в аукционе и соответствующий ответ поставщику
         ACLMessage answer = new ACLMessage(ACLMessage.INFORM);
         answer.setConversationId("AnsFromProducer");
-        if (ProducersFunctions.ProducerFunc(getAgent().getLocalName()) >= RequiredPower) {
+        if (ProducersFunctions.ProducerFunc(getAgent().getLocalName()) - (Double) getAgent().getArguments()[0] >= RequiredPower) {
             answer.setContent("HavePower");
             isHavePower = true;
         } else {
@@ -36,17 +36,17 @@ public class GetInviteBeh extends Behaviour {
         }
         answer.addReceiver(new AID(RequestFromCons.getSender().getLocalName(), false));
         getAgent().send(answer);
-        System.out.println(TimeTracker.getCurrentHour() +"..5    Производитель" + getAgent().getLocalName() + " отвечает провайдеру " + RequestFromCons.getSender().getLocalName() + " по поводу наличия у него мощности: " + answer.getContent() + " полагая, что " + ProducersFunctions.ProducerFunc(getAgent().getLocalName()) + " > " + RequiredPower);
-//            isAnswerSend = true;
+        System.out.println(TimeTracker.getCurrentHour() +"..5    Производитель" + getAgent().getLocalName() + " отвечает провайдеру " + RequestFromCons.getSender().getLocalName() + " по поводу наличия у него мощности: " + answer.getContent() + " полагая, что " + (ProducersFunctions.ProducerFunc(getAgent().getLocalName()) - (Double)getAgent().getArguments()[0]) + " > " + RequiredPower);
+        isAnswerSend = true;
 //        counter1++;
-        counter1 = 5;
+//        counter1 = 5;
 //        System.out.println(getAgent().getLocalName() + " принял запрос на " + RequiredPower + " в " + TimeTracker.getCurrentHour() + " часу, имея мощность = " + ProducersFunctions.ProducerFunc(getAgent().getLocalName()) + " и сказал " + answer.getContent());
 //        }
     }
 
     @Override
     public boolean done() {
-        return (counter1 >= 3); //isAnswerSend;
+        return isAnswerSend; //isAnswerSend;
     }
 
     @Override

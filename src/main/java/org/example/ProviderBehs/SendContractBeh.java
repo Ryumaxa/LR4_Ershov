@@ -22,7 +22,7 @@ public class SendContractBeh extends Behaviour {
             // Отправка контракта победителю
             ACLMessage contractMessage = new ACLMessage(ACLMessage.INFORM);
             contractMessage.setConversationId("Contract");
-            contractMessage.setContent("YouHaveNewContract");
+            contractMessage.setContent((((HashMap<String, Object>)getAgent().getArguments()[0]).get("power")) + "");
             contractMessage.addReceiver(new AID(winnerName, false));
             getAgent().send(contractMessage);
             System.out.println(TimeTracker.getCurrentHour() +"..15    Провайдер" + getAgent().getLocalName() + " отправляет контракт победителю " + winnerName);

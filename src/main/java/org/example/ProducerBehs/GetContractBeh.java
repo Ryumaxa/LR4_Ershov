@@ -17,12 +17,15 @@ public class GetContractBeh extends Behaviour {
             // С вероятностью 95% контракт будет принят
             if (Math.random() <= 0.95) {
                 ansToContract.setContent("OK");
+                double powReserve1 = (Double) getAgent().getArguments()[0];
+                double powReserve2 = powReserve1 + Double.parseDouble(messageContract.getContent());
+                getAgent().setArguments(new Object[]{powReserve2});
             } else {
                 ansToContract.setContent("NO");
             }
             ansToContract.addReceiver(new AID(messageContract.getSender().getLocalName(), false));
             getAgent().send(ansToContract);
-            System.out.println(TimeTracker.getCurrentHour() +"..17    Производитель отвечает на контракт");
+            System.out.println(TimeTracker.getCurrentHour() +"..17    Производитель отвечает на контракт и новый резерв по мощности " + (Double) getAgent().getArguments()[0]);
         }
     }
 
