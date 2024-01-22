@@ -11,7 +11,7 @@ import org.example.HelperClasses.TopicHelper;
 
 public class GoToAuctionBeh extends OneShotBehaviour {
     AID topic;
-    double minPrice; //= ProducersFunctions.getPPminPrice(getAgent().getLocalName());
+    double minPrice;
     double currentPrice;
     boolean isImWinner = false;
 
@@ -19,6 +19,7 @@ public class GoToAuctionBeh extends OneShotBehaviour {
     public void onStart() {
         minPrice = ProducersFunctions.getPPminPrice(getAgent().getLocalName());
         currentPrice = minPrice * 2;
+
         // Подключаемся к топику при получении приглашения
         ACLMessage invite = null;
         while (invite == null) {
@@ -59,10 +60,6 @@ public class GoToAuctionBeh extends OneShotBehaviour {
                     throw new RuntimeException(e);
                 }
             }
-//            ACLMessage stopper_mes = getAgent().receive(MessageTemplate.MatchConversationId("Stopper"));
-//            if (stopper_mes != null) {
-//                stopper = stopper_mes;
-//            }
             stopper = getAgent().receive(MessageTemplate.MatchConversationId("Stopper"));
         }
         //Если этот производитель победил в аукционе

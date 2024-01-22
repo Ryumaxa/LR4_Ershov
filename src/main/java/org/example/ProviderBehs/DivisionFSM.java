@@ -31,7 +31,6 @@ public class DivisionFSM extends FSMBehaviour {
         this.registerLastState(new OneShotBehaviour() {
             @Override
             public void action() {
-                //System.out.println("Не нашлось откликнувшихся участников " + getAgent().getLocalName());
             }
         }, END);
 

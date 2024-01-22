@@ -10,7 +10,7 @@ public class TimeTracker {
         startTime = LocalDateTime.now();
     }
 
-    public static long getMillsUntilNextHour () { // ЗАМЕНИТЬ 1000 на 48!
+    public static long getMillsUntilNextHour () { // ЗАМЕНИТЬ 1000 на 48
         LocalDateTime currentTime = LocalDateTime.now();
         long millisecondsPassed = startTime.until(currentTime, ChronoUnit.MILLIS);
         long hour = millisecondsPassed * 1000 / 3600000;

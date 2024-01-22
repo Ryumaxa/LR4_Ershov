@@ -1,4 +1,5 @@
 package org.example.ProviderBehs;
+
 import jade.core.AID;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
@@ -6,11 +7,9 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.DfHelper;
 import org.example.HelperClasses.TimeTracker;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class ReceiveRequestBeh extends OneShotBehaviour {
     boolean isInvitesSend = false;
@@ -21,11 +20,10 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
         RequestFromConsumer = requestFromConsumer;
     }
 
-
     public ReceiveRequestBeh(ACLMessage requestFromConsumer) {
         RequestFromConsumer = requestFromConsumer;
     }
-    private FSMBehaviour divisionBeh;
+
     @Override
     public void action() {
 
@@ -34,8 +32,6 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
         String[] values = content.split(";");
         double RequiredPower = Double.parseDouble(values[0]);
 
-
-        //ProviderFSM.setPowerInfo(RequiredPower);
         // Агент записал информацию о требуемой мощности
         HashMap<String, Object> myHashMap = (HashMap<String, Object>) getAgent().getArguments()[0];
         myHashMap.put("power", RequiredPower);
@@ -67,9 +63,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
                 }
             }
         }
-        System.out.println(TheyHavePower);
 
-        //ProviderFSM.setAuctionParticipants(TheyHavePower); // Для передачи списка участников дальше по поведениям
         // Агент записал информацию об участниках
         myHashMap.put("participants", TheyHavePower);
         getAgent().setArguments(new Object[]{myHashMap});
@@ -97,21 +91,7 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
             String[] values = content.split(";");
             double RequiredPower = Double.parseDouble(values[0]);
             RequestFromConsumer.setContent((RequiredPower/3) + "");
-//            for (int i = 0; i < 3; i++) {
-//                if (divisionBeh != null) {
-//                    getAgent().removeBehaviour(divisionBeh);
-//                }
-//                divisionBeh = new DivisionFSM(RequestFromConsumer);
-//                getAgent().addBehaviour(divisionBeh);
-//            }
             getAgent().addBehaviour(new DivisionStarter(RequestFromConsumer));
-
-//            ACLMessage AnsToConsumer = new ACLMessage(ACLMessage.INFORM);
-//            AnsToConsumer.setConversationId("AuctionResults");
-//            AnsToConsumer.addReceiver(new AID(getAgent().getLocalName().replace("ProviderOf", ""), false));
-//            AnsToConsumer.setContent("fail");
-//            getAgent().send(AnsToConsumer);
-//            System.out.println(TimeTracker.getCurrentHour() +"..19    Провайдер отправляет отчет потребителю " + "fail");
         }
 
         return isInvitesSend ? 1 : 0;

@@ -3,13 +3,7 @@ package org.example.ProviderBehs;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
 
 public class ProviderFSM extends FSMBehaviour {
     private ACLMessage RequestFromCons;
@@ -17,22 +11,6 @@ public class ProviderFSM extends FSMBehaviour {
     public ProviderFSM(ACLMessage requestFromCons) {
         RequestFromCons = requestFromCons;
     }
-
-//    @Getter
-//    @Setter
-//    private static List<String> AuctionParticipants = new ArrayList<>(); // Лист участников
-//
-//    @Getter
-//    @Setter
-//    private static String winnerName; // Имя победителя
-//
-//    @Getter
-//    @Setter
-//    private static double powerInfo; // Закупленная мощность
-//
-//    @Getter
-//    @Setter
-//    private static double priceInfo;
 
     private static final String RECEIVE_REQUEST = "receiveRequest", START_AUCTION = "startAuction", SEND_CONTRACT = "sendContract", END = "end";
     public void onStart() {
@@ -52,7 +30,6 @@ public class ProviderFSM extends FSMBehaviour {
         this.registerLastState(new OneShotBehaviour() {
             @Override
             public void action() {
-                //System.out.println("Не нашлось откликнувшихся участников " + getAgent().getLocalName());
             }
         }, END);
 

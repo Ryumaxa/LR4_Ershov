@@ -5,9 +5,7 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.TimeTracker;
-
 import java.util.HashMap;
-import java.util.List;
 
 public class SendContractBeh extends Behaviour {
     boolean isReady = false;
@@ -59,7 +57,7 @@ public class SendContractBeh extends Behaviour {
             double priceInfo = (Double)(((HashMap<String, Object>)getAgent().getArguments()[0]).get("price"));
 
             AnsToConsumer.setContent("success;" + powerInfo + ";" + priceInfo + ";" + winnerName);
-            System.out.println(AnsToConsumer.getContent());
+
         } else {
             AnsToConsumer.setContent("fail");
         }

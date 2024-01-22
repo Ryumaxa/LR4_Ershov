@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.HelperClasses.TimeTracker;
 
 @Slf4j
-public class ConsumerWaitingBeh extends Behaviour { // СЧИТАЮ ЭТО ПОВЕДЕНИЕ РАБОЧИМ
+public class ConsumerWaitingBeh extends Behaviour {
     String result = null;
     boolean ansReceived = false;
     @Override

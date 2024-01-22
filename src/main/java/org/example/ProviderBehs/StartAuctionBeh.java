@@ -7,7 +7,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.TimeTracker;
 import org.example.HelperClasses.TopicHelper;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class StartAuctionBeh extends Behaviour {
     String winnerName = "";
     AID topic;
     long time1;
+
     @Override
     public void onStart() {
         time1 = TimeTracker.getMillsUntilNextHour();
@@ -44,11 +44,8 @@ public class StartAuctionBeh extends Behaviour {
             ACLMessage stopper = new ACLMessage(ACLMessage.INFORM);
             stopper.setConversationId("Stopper");
             stopper.setContent(winnerName);
-//            ProviderFSM.setWinnerName(winnerName); // ЭТО УДАЛИТЬ ТОЧНО
 
-            //List<String> Participants = ProviderFSM.getAuctionParticipants();
             List<String> Participants = (List<String>)(((HashMap<String, Object>)getAgent().getArguments()[0]).get("participants"));
-
             System.out.println("PARTICIPANTS" + Participants);
 
             for (String agentName : Participants) {
@@ -63,7 +60,6 @@ public class StartAuctionBeh extends Behaviour {
         }
     }
 
-    // Когда победитель будет найден
     @Override
     public boolean done() {
         return winnerHasFound;
@@ -71,9 +67,6 @@ public class StartAuctionBeh extends Behaviour {
 
     @Override
     public int onEnd() {
-
-//        ProviderFSM.setPriceInfo(bestPrice);
-//        ProviderFSM.setWinnerName(winnerName);
         HashMap<String, Object> myHashMap = (HashMap<String, Object>) getAgent().getArguments()[0];
         myHashMap.put("price", bestPrice);
         myHashMap.put("winner", winnerName);

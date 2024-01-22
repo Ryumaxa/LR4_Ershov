@@ -4,10 +4,10 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
 import org.example.HelperClasses.TimeTracker;
 
-public class ConsumerCyclicBeh extends Behaviour { // Поведение для вызова FSM в начале каждого часа
+public class ConsumerStarterBeh extends Behaviour { // Поведение для вызова FSM в начале каждого часа
     private int hour;
 
-    public ConsumerCyclicBeh(int hour) {
+    public ConsumerStarterBeh(int hour) {
         this.hour = hour;
     }
 
