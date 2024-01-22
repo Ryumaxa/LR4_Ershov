@@ -8,9 +8,11 @@ import java.util.HashMap;
 
 public class DivisionFSM extends FSMBehaviour {
     private ACLMessage RequestFromCons;
+    public String topicName;
 
-    public DivisionFSM(ACLMessage requestFromCons) {
+    public DivisionFSM(ACLMessage requestFromCons, String topicName) {
         RequestFromCons = requestFromCons;
+        this.topicName = topicName;
     }
 
     private static final String RECEIVE_REQUEST = "receiveRequest", START_AUCTION = "startAuction", SEND_CONTRACT = "sendContract", END = "end";
@@ -25,8 +27,8 @@ public class DivisionFSM extends FSMBehaviour {
         Object[] argument = {HashMapProviderInfoMap};
         getAgent().setArguments(argument);
 
-        this.registerFirstState(new ReceiveRequestBeh(true, RequestFromCons), RECEIVE_REQUEST); // OneShotBehaviour с ожиданием запроса от потребителя. Возвращает 1 или 0 в зависимости от успешности поиска производителей
-        this.registerState(new StartAuctionBeh(), START_AUCTION); // Поведение создания топика и начала прочитывания сообщений в нем
+        this.registerFirstState(new ReceiveRequestBeh(true, RequestFromCons, topicName), RECEIVE_REQUEST); // OneShotBehaviour с ожиданием запроса от потребителя. Возвращает 1 или 0 в зависимости от успешности поиска производителей
+        this.registerState(new StartAuctionBeh(topicName), START_AUCTION); // Поведение создания топика и начала прочитывания сообщений в нем
         this.registerState(new SendContractBeh(), SEND_CONTRACT); // Отправка контракта
         this.registerLastState(new OneShotBehaviour() {
             @Override

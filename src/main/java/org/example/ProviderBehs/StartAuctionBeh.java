@@ -17,12 +17,26 @@ public class StartAuctionBeh extends Behaviour {
     String winnerName = "";
     AID topic;
     long time1;
+    private String topicName = null;
+
+    public StartAuctionBeh(String topicName) {
+        this.topicName = topicName;
+    }
+
+    public StartAuctionBeh() {
+    }
+
     @Override
     public void onStart() {
         time1 = TimeTracker.getMillsUntilNextHour();
         // Тут создается топик с соответствующим именем
         try {
-            topic = TopicHelper.register(getAgent(), "Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour());
+            if (topicName == null) {
+                topic = TopicHelper.register(getAgent(), "Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour());
+            } else {
+                topic = TopicHelper.register(getAgent(), topicName);
+            }
+
         } catch (ServiceException e) {
             throw new RuntimeException(e);
         }
