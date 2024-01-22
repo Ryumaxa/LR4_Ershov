@@ -25,10 +25,10 @@ public class ConsumerWaitingBeh extends Behaviour {
                 double requiredPower = Double.parseDouble(values[1]);
                 double price = Double.parseDouble(values[2]);
                 String winner = values[3];
-                System.out.println("!!! " + getAgent().getLocalName() + " успешно закупил " + requiredPower + " кВт*ч по цене " + price + " руб. за кВт*ч у " + winner + ", час = " + TimeTracker.getCurrentHour());
+                System.err.println("!!! " + getAgent().getLocalName() + " успешно закупил " + requiredPower + " кВт*ч по цене " + price + " руб. за кВт*ч у " + winner + ", час = " + TimeTracker.getCurrentHour());
             } else {
                 result = "fail";
-                System.out.println("Неудачная попытка закупки мощности за " + TimeTracker.getCurrentHour() + " час");
+                System.err.println(getAgent().getLocalName() + " : Неудачная попытка закупки мощности за " + TimeTracker.getCurrentHour() + " час");
             }
         }
     }

@@ -1,7 +1,6 @@
 package org.example.ProviderBehs;
 
 import jade.core.AID;
-import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
