@@ -2,13 +2,10 @@ package org.example.ProviderBehs;
 import jade.core.AID;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.ParallelBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.HelperClasses.DfHelper;
 import org.example.HelperClasses.TimeTracker;
-import org.example.ProducerBehs.ProducerStartBeh;
-import org.example.ProducerBehs.ReservedPowerResetBeh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,13 +16,9 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
     boolean isInvitesSend = false;
     private boolean isLastTry = false;
     private ACLMessage RequestFromConsumer;
-    private String oldTopicName;
-    private String newTopicName = null;
-
-    public ReceiveRequestBeh(boolean isLastTry, ACLMessage requestFromConsumer, String newTopicName) {
+    public ReceiveRequestBeh(boolean isLastTry, ACLMessage requestFromConsumer) {
         this.isLastTry = isLastTry;
         RequestFromConsumer = requestFromConsumer;
-        this.newTopicName = newTopicName;
     }
 
 
@@ -86,17 +79,6 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
             ACLMessage invite = new ACLMessage(ACLMessage.INFORM);
             invite.setConversationId("InviteToAuction");
             invite.setContent("Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour());
-            oldTopicName = invite.getContent();
-            if (newTopicName != null) {
-                invite.setContent(newTopicName);
-            }
-
-
-
-
-
-
-
             for (String s : TheyHavePower) {
                 invite.addReceiver(new AID(s, false));
             }
@@ -110,24 +92,19 @@ public class ReceiveRequestBeh extends OneShotBehaviour {
     public int onEnd() {
 
         if (!isInvitesSend && !isLastTry) {
-            System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             // Деление мощности на 3 и запуск 3 поведений с делением
             String content = RequestFromConsumer.getContent();
             String[] values = content.split(";");
             double RequiredPower = Double.parseDouble(values[0]);
             RequestFromConsumer.setContent((RequiredPower/3) + "");
-
-            for (int i = 1; i < 4; i++) {
-                if (divisionBeh != null) {
-                    getAgent().removeBehaviour(divisionBeh);
-                }
-
-                divisionBeh = new DivisionFSM(RequestFromConsumer, ("Topic_of_" + getAgent().getLocalName() + "_hour_" + TimeTracker.getCurrentHour()+"___"+i));
-                getAgent().addBehaviour(divisionBeh);
-
-            }
-
-
+//            for (int i = 0; i < 3; i++) {
+//                if (divisionBeh != null) {
+//                    getAgent().removeBehaviour(divisionBeh);
+//                }
+//                divisionBeh = new DivisionFSM(RequestFromConsumer);
+//                getAgent().addBehaviour(divisionBeh);
+//            }
+            getAgent().addBehaviour(new DivisionStarter(RequestFromConsumer));
 
 //            ACLMessage AnsToConsumer = new ACLMessage(ACLMessage.INFORM);
 //            AnsToConsumer.setConversationId("AuctionResults");
